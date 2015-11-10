@@ -50,6 +50,7 @@ Documentation for each helper can be found in the [Ember API reference](http://e
 
 - [`each-in`](http://emberjs.com/api/classes/Ember.Templates.helpers.html#method_each-in)
 - [`each`](http://emberjs.com/api/classes/Ember.Templates.helpers.html#method_each)
+- [`get`](http://emberjs.com/api/classes/Ember.Templates.helpers.html#method_get)
 - [`if`](http://emberjs.com/api/classes/Ember.Templates.helpers.html#method_if)
 - [`log`](http://emberjs.com/api/classes/Ember.Templates.helpers.html#method_log)
 - [`unless`](http://emberjs.com/api/classes/Ember.Templates.helpers.html#method_unless)
