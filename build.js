@@ -16,50 +16,64 @@ var packagesSourcePath = path.resolve(__dirname, './packages');
 var mainOutputPath = path.join(outputPath, 'index.js');
 
 var packageNames = getPackageNames(packagesSourcePath);
+var importAliases = {
+};
 
 removeDirectory(outputPath);
-buildPackages(packagesSourcePath, outputPath, packageNames, config);
-buildMain(mainSourcePath, mainOutputPath, packageNames, config);
+buildPackages(packagesSourcePath, outputPath, packageNames, importAliases, config);
+buildMain(mainSourcePath, mainOutputPath, packageNames, importAliases, config);
 
 
-function buildPackages(sourcePath, outputPath, localPackageNames, config) {
+function buildPackages(sourcePath, outputPath, localPackageNames, importAliases, config) {
   var packagePaths = getChildDirectories(sourcePath);
   packagePaths.forEach(function(packagePath) {
     var packageName = getPackageName(packagePath);
     var packageOutputPath = path.join(outputPath, packageName);
-    buildPackage(packagePath, packageOutputPath, localPackageNames, config);
+    buildPackage(packagePath, packageOutputPath, localPackageNames, importAliases, config);
   });
 }
 
-function buildMain(sourcePath, outputPath, localPackageNames, config) {
+function buildMain(sourcePath, outputPath, localPackageNames, importAliases, config) {
   var transpilerOptions = objectAssign({}, config, {
-    resolveModuleSource: function(source, filename) {
-      if (isLocalPackageImport(source, localPackageNames)) {
-        return './' + source;
-      }
-      return source;
-    }
+    resolveModuleSource: createModuleResolver(sourcePath, importAliases, localPackageNames)
   });
   transpileFile(sourcePath, outputPath, transpilerOptions);
 }
 
-function buildPackage(sourcePath, outputPath, localPackageNames, config) {
+function buildPackage(sourcePath, outputPath, localPackageNames, importAliases, config) {
   var packageSourcePath = path.join(sourcePath, './lib');
   var packageOutputPath = outputPath;
   var sourcePaths = glob.sync(packageSourcePath + '/**/*.js');
   var transpilerOptions = objectAssign({}, config, {
-    resolveModuleSource: function(source, filename) {
-      if (isLocalPackageImport(source, localPackageNames)) {
-        var relativePath = path.relative(filename, packageSourcePath);
-        return relativePath + '/' + source;
-      }
-      return source;
-    }
+    resolveModuleSource: createModuleResolver(packageSourcePath, importAliases, localPackageNames)
   });
   sourcePaths.forEach(function(sourcePath) {
     var outputPath = sourcePath.replace(packageSourcePath, packageOutputPath);
     transpileFile(sourcePath, outputPath, transpilerOptions);
   });
+}
+
+function createModuleResolver(packageRoot, aliases, localPackageNames) {
+    return function(source, filename) {
+      source = resolveAliases(source, aliases);
+      if (isLocalPackageImport(source, localPackageNames)) {
+        var relativePath = path.relative(filename, packageRoot) || '.';
+        return relativePath + '/' + source;
+      } else {
+        return source;
+      }
+    }
+
+
+    function resolveAliases(importPath, aliases) {
+      var resolvedPath = Object.keys(aliases).reduce(function(importPath, key) {
+        var source = key;
+        var destination = aliases[key];
+        var pattern = new RegExp('^' + source + '(?=$|\\/)');
+        return importPath.replace(pattern, destination);
+      }, importPath);
+      return resolvedPath;
+    }
 }
 
 function getPackageNames(sourcePath) {
