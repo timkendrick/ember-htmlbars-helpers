@@ -28,6 +28,7 @@
     "object-assign": "^4.0.1"
   },
   "dependencies": {
-    "babel-core": "^6.1.2"
+    "babel-core": "^6.1.2",
+    "htmlbars": "^0.14.6"
   }
 }

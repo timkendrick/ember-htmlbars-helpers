@@ -17,6 +17,7 @@ var mainOutputPath = path.join(outputPath, 'index.js');
 
 var packageNames = getPackageNames(packagesSourcePath);
 var importAliases = {
+  'htmlbars-runtime': 'htmlbars/dist/cjs/htmlbars-runtime'
 };
 
 removeDirectory(outputPath);

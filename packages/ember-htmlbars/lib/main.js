@@ -5,6 +5,8 @@ import { ifHelper, unlessHelper } from 'ember-htmlbars/helpers/if_unless';
 import logHelper from 'ember-htmlbars/helpers/log';
 import withHelper from 'ember-htmlbars/helpers/with';
 
+import partialKeyword from 'ember-htmlbars/keywords/partial';
+
 export var helpers = {
   'each-in': eachInHelper,
   'each': eachHelper,
@@ -16,4 +18,5 @@ export var helpers = {
 };
 
 export var keywords = {
+  'partial': partialKeyword
 }
