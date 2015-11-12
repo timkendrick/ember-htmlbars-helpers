@@ -14,3 +14,6 @@ export var helpers = {
   'log': logHelper,
   'with': withHelper
 };
+
+export var keywords = {
+}

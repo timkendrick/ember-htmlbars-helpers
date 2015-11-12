@@ -1,5 +1,8 @@
 /* eslint-env node */
 
-import { helpers } from 'ember-htmlbars/main';
+import { helpers, keywords } from 'ember-htmlbars/main';
 
-module.exports = helpers;
+export {
+  helpers,
+  keywords
+};
