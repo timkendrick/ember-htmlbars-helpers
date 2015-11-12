@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/timkendrick/ember-htmlbars-helpers",
   "devDependencies": {
-    "babel": "^6.0.15",
+    "babel-core": "^6.1.19",
     "babel-preset-es2015": "^6.1.2",
     "del": "^2.0.2",
     "glob": "^5.0.15",
@@ -28,7 +28,6 @@
     "object-assign": "^4.0.1"
   },
   "dependencies": {
-    "babel-core": "^6.1.2",
     "htmlbars": "^0.14.6"
   }
 }
